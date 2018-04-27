@@ -10,6 +10,8 @@ import io.finch.syntax._
 import io.circe.generic.auto._
 import com.twitter.util.Future
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 object ChatServer {
 
   case class ChatRequest(correlationID: String, message: String)
@@ -23,7 +25,7 @@ object ChatServer {
     case class InvalidResponse(error: String) extends InitResponse
 
     val chatInitHeader: Endpoint[String] =
-      header("correlationID").mapOutputAsync(id => {
+      header("x-correlation-id").mapOutputAsync(id => {
         if (id == null) Future.value(Ok("Invalid correlationID"))
         else Future.value(Ok(UUID.randomUUID().toString))
       })
@@ -33,17 +35,22 @@ object ChatServer {
         .withHeader("version", version)
     }
 
+    import io.finch.syntax.scalaFutures._
+
+    val heartbeat = get("foo") {
+      scala.concurrent.Future.successful(Ok("chat-server"))
+    }
+
     val chat: Endpoint[ChatResponse] =
       post("chat"
         :: header("x-user")
         :: header("x-client-version")
-        :: jsonBody[ChatRequest]) {
-        (user: String, version: String, chatRequest: ChatRequest) =>
+        :: jsonBody[ChatRequest]) { (user: String, version: String, chatRequest: ChatRequest) =>
 
-        Ok(ChatPipeline.pipeline(chatRequest))
+        ChatPipeline.pipeline(chatRequest).map(Ok)
       }
 
-    val endpoints = (chatInit :+: chat).toService
+    val endpoints = (heartbeat :+: chatInit :+: chat).toService
 
     Await.ready(Http.server.serve(":9090", endpoints))
 
