@@ -37,7 +37,7 @@ object ChatServer {
 
     import io.finch.syntax.scalaFutures._
 
-    val heartbeat = get("foo") {
+    val heartbeat = get("heartbeat") {
       scala.concurrent.Future.successful(Ok(
         Map(
           "app" -> AppConfig.AppName,
