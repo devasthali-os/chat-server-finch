@@ -16,7 +16,7 @@ object ChatServer {
 
   case class ChatRequest(correlationID: String, message: String)
 
-  case class ChatResponse(correlationID: String, displayText: String)
+  case class ChatResponse(correlationID: String, displayText: String, version: String)
 
   def main(args: Array[String]): Unit = {
 
@@ -38,7 +38,12 @@ object ChatServer {
     import io.finch.syntax.scalaFutures._
 
     val heartbeat = get("foo") {
-      scala.concurrent.Future.successful(Ok("chat-server"))
+      scala.concurrent.Future.successful(Ok(
+        Map(
+          "app" -> AppConfig.AppName,
+          "version" -> AppConfig.AppVersion,
+          "env" -> AppConfig.AppEnvironment)
+      ))
     }
 
     val chat: Endpoint[ChatResponse] =

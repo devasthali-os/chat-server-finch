@@ -72,5 +72,5 @@ Perf
 TODOs
 -----
 
-1) Docker
+1) pass in app properties like -Dapp.environment=dev
 2) add typesafe config to read intent-names

@@ -9,8 +9,8 @@ object ChatPipeline {
 
   def pipeline(chatRequest: ChatRequest)(implicit executionContext: ExecutionContext): Future[ChatResponse] = {
     NluService.findIntent(chatRequest).map {
-      case IntentResponse("NearbyCoffeeIntent") => ChatResponse(chatRequest.correlationID, "Here are coffee shops")
-      case _ => ChatResponse(chatRequest.correlationID, "Did not understand you")
+      case IntentResponse("NearbyCoffeeIntent") => ChatResponse(chatRequest.correlationID, "Here are coffee shops", AppConfig.AppVersion)
+      case _ => ChatResponse(chatRequest.correlationID, "Did not understand you", AppConfig.AppVersion)
     }
 
   }
