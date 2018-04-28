@@ -73,6 +73,9 @@ TODOs
 -----
 
 1) pass in app properties like `-environment=dev`
-2) add typesafe config to read intent-names
+
+~~2) add typesafe config to read intent-names~~
+
 3) expose client-api as a `chat-server-client.jar`
+
 4) logging

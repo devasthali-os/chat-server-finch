@@ -19,4 +19,4 @@ ENV PATH $JAVA_HOME/bin:$PATH
 COPY target/scala-2.12/chat-server.jar /home/chat-server.jar
 
 EXPOSE 9090
-CMD ["java","-jar","/home/chat-server.jar"]
+ENTRYPOINT ["java", "-jar", "/home/chat-server.jar"]
