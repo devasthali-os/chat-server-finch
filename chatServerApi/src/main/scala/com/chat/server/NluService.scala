@@ -6,7 +6,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 object NluService {
 
-  case class IntentResponse(intentName: String)
+  final case class IntentResponse(intentName: String)
 
   def findIntent(chatRequest: ChatRequest)(
       implicit executionContext: ExecutionContext): Future[IntentResponse] =

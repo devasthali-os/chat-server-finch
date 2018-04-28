@@ -17,7 +17,7 @@ import scala.util.{Failure, Success}
 
 object ChatServer {
 
-  val logger = LoggerFactory.getLogger("ChatServer")
+  private val logger = LoggerFactory.getLogger("ChatServer")
 
   def main(args: Array[String]): Unit = {
 
