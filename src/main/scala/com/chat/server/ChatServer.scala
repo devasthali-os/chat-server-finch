@@ -9,10 +9,14 @@ import io.finch.circe._
 import io.finch.syntax._
 import io.circe.generic.auto._
 import com.twitter.util.Future
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 object ChatServer {
+
+  val logger = LoggerFactory.getLogger("ChatServer")
 
   case class ChatRequest(correlationID: String, message: String)
 
@@ -52,7 +56,11 @@ object ChatServer {
         :: header("x-client-version")
         :: jsonBody[ChatRequest]) { (user: String, version: String, chatRequest: ChatRequest) =>
 
-        ChatPipeline.pipeline(chatRequest).map(Ok)
+        logger.info(s"request: $chatRequest")
+        ChatPipeline.pipeline(chatRequest).map(Ok) andThen {
+          case Success(s) => logger.info(s"response: $s")
+          case Failure(e) => logger.info(s"error: $e")
+        }
       }
 
     val endpoints = (heartbeat :+: chatInit :+: chat).toService

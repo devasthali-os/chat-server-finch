@@ -8,7 +8,8 @@ libraryDependencies ++= Seq(
   "com.github.finagle" %% "finch-core" % "0.18.0",
   "com.github.finagle" %% "finch-circe" % "0.18.0",
   "io.circe" %% "circe-generic" % "0.9.3",
-  "com.typesafe" % "config" % "1.3.3"
+  "com.typesafe" % "config" % "1.3.3",
+  "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
 
 resolvers += "central" at "http://central.maven.org/maven2/"

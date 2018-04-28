@@ -1,11 +1,11 @@
 
-```
+```bash
 sbt assembly
 ```
 
 run locally
 
-```
+```bash
 java -jar target/scala-2.12/chat-server.jar
 Apr 26, 2018 11:33:39 PM com.twitter.finagle.Init$ $anonfun$once$1
 INFO: Finagle version 18.3.0 (rev=87424ce8cee3075f9140082a0f91b4a3256a1f50) built at 20180306-113908
@@ -20,7 +20,7 @@ run using docker
 ```
 docker build -t chat-server .
 
-docker run -p 9090:9090 --name chat-server chat-server
+docker run -p 9090:9090 --name chat-server chat-server -e environment=stage
 ```
 
 ```
@@ -72,5 +72,7 @@ Perf
 TODOs
 -----
 
-1) pass in app properties like -Dapp.environment=dev
+1) pass in app properties like `-environment=dev`
 2) add typesafe config to read intent-names
+3) expose client-api as a `chat-server-client.jar`
+4) logging
