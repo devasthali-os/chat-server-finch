@@ -21,19 +21,18 @@ lazy val chatServerApi = project
     assemblySettings,
     libraryDependencies ++= Seq(
       "com.github.finagle" %% "finch-core" % "0.18.0"
-        exclude("io.netty", "netty-transport-native-unix-common")
-        exclude("io.netty", "netty-codec-http")
-        exclude("io.netty", "netty-codec-http2")
-        exclude("io.netty", "netty-codec")
-        exclude("io.netty", "netty-transport")
-        exclude("io.netty", "netty-buffer")
-        exclude("io.netty", "netty-common")
-        exclude("io.netty", "netty-resolver")
-        exclude("io.netty", "netty-handler")
-        exclude("io.netty", "netty-tcnative-boringssl-static")
-        exclude("io.netty", "netty-transport-native-epoll")
-        exclude("io.netty", "netty-handler-proxy"),
-
+        exclude ("io.netty", "netty-transport-native-unix-common")
+        exclude ("io.netty", "netty-codec-http")
+        exclude ("io.netty", "netty-codec-http2")
+        exclude ("io.netty", "netty-codec")
+        exclude ("io.netty", "netty-transport")
+        exclude ("io.netty", "netty-buffer")
+        exclude ("io.netty", "netty-common")
+        exclude ("io.netty", "netty-resolver")
+        exclude ("io.netty", "netty-handler")
+        exclude ("io.netty", "netty-tcnative-boringssl-static")
+        exclude ("io.netty", "netty-transport-native-epoll")
+        exclude ("io.netty", "netty-handler-proxy"),
       "com.github.finagle" %% "finch-circe" % "0.18.0",
       "io.netty" % "netty-codec" % NettyVersion,
       "io.netty" % "netty-codec-http" % NettyVersion,
@@ -48,7 +47,6 @@ lazy val chatServerApi = project
       "io.netty" % "netty-transport-native-epoll" % NettyVersion,
       "io.netty" % "netty-tcnative-boringssl-static" % "2.0.6.Final",
       "io.netty" % "netty-codec-socks" % NettyVersion,
-
       "io.circe" %% "circe-generic" % "0.9.3",
       "com.typesafe" % "config" % "1.3.3",
       "ch.qos.logback" % "logback-classic" % "1.2.3"
@@ -106,9 +104,9 @@ lazy val scalafmtSettings =
 
 lazy val assemblySettings = Seq(
   assemblyJarName in assembly := name.value + ".jar",
-  mainClass in assembly := Some("com.chat.server.ChatServer")
-  //  assemblyMergeStrategy in assembly := {
-  //    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-  //    case _                             => MergeStrategy.first
-  //  }
+  mainClass in assembly := Some("com.chat.server.ChatServer"),
+  assemblyMergeStrategy in assembly := {
+    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+    case _                             => MergeStrategy.first
+  }
 )
