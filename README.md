@@ -81,12 +81,14 @@ TODOs
 
 ~~2) add typesafe config to read intent-names~~
 
-3) expose client-api as a `chat-server-client.jar`, make sure it can be used as sbt deps
+~~3) expose client-api as a `chat-server-client.jar` (to maven not ivy), make sure it can be used as sbt deps - https://github.com/duwamish-os/chat-server-api-client~~
 
-4) logging
+4) provide http-client
 
-5) add swagger
+5) logging
 
-6) Websocket - https://github.com/finagle/finagle-websocket
+6) **add swagger**
 
-7) don't create jar for root
+7) Websocket - https://github.com/finagle/finagle-websocket
+
+8) don't create jar for root

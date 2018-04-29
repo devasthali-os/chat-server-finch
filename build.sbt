@@ -2,16 +2,50 @@ name := "chatServerParent"
 organization in ThisBuild := "com.chat.server"
 scalaVersion in ThisBuild := "2.12.5"
 
+version := "1.0-SNAPSHOT"
+
 lazy val chatServerParent = project
   .in(file("."))
   .settings(settings)
   .aggregate(chatServerSchema, chatServerApi)
 
 lazy val chatServerSchema =
-  project.settings(name := "chatServerSchema",
-                   settings,
-                   apiSchemaAssemblySettings,
-                   libraryDependencies ++= commonDependencies)
+  project.settings(
+    name := "chatServerSchema",
+    publishMavenStyle := true,
+    settings,
+    apiSchemaAssemblySettings
+    //TODO add featherbed for http-client lib
+//    libraryDependencies ++= Seq(
+//      "io.github.finagle" %% "featherbed-core" % "0.3.3"
+//        exclude ("io.netty", "netty-transport-native-unix-common")
+//        exclude ("io.netty", "netty-codec-http")
+//        exclude ("io.netty", "netty-codec-http2")
+//        exclude ("io.netty", "netty-codec")
+//        exclude ("io.netty", "netty-transport")
+//        exclude ("io.netty", "netty-buffer")
+//        exclude ("io.netty", "netty-common")
+//        exclude ("io.netty", "netty-resolver")
+//        exclude ("io.netty", "netty-handler")
+//        exclude ("io.netty", "netty-tcnative-boringssl-static")
+//        exclude ("io.netty", "netty-transport-native-epoll")
+//        exclude ("io.netty", "netty-handler-proxy"),
+//      "io.netty" % "netty-codec" % NettyVersion,
+//      "io.netty" % "netty-codec-http" % NettyVersion,
+//      "io.netty" % "netty-codec-http2" % NettyVersion,
+//      "io.netty" % "netty-transport" % NettyVersion,
+//      "io.netty" % "netty-buffer" % NettyVersion,
+//      "io.netty" % "netty-common" % NettyVersion,
+//      "io.netty" % "netty-resolver" % NettyVersion,
+//      "io.netty" % "netty-handler" % NettyVersion,
+//      "io.netty" % "netty-handler-proxy" % NettyVersion,
+//      "io.netty" % "netty-transport-native-unix-common" % NettyVersion,
+//      "io.netty" % "netty-transport-native-epoll" % NettyVersion,
+//      "io.netty" % "netty-tcnative-boringssl-static" % "2.0.6.Final",
+//      "io.netty" % "netty-codec-socks" % NettyVersion,
+//      "io.github.finagle" %% "featherbed-circe" % "0.3.3"
+//    )
+  )
 
 val NettyVersion = "4.1.16.Final"
 
@@ -102,7 +136,7 @@ lazy val scalafmtSettings = Seq(scalafmtOnCompile := true,
                                 scalafmtVersion := "1.2.0")
 
 lazy val apiAssemblySettings = Seq(
-  assemblyJarName in assembly := name.value + ".jar",
+  assemblyJarName in assembly := name.value + "-" + version.value + ".jar",
   mainClass in assembly := Some("com.chat.server.ChatServer"),
   assemblyMergeStrategy in assembly := {
     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
@@ -111,4 +145,8 @@ lazy val apiAssemblySettings = Seq(
 )
 
 lazy val apiSchemaAssemblySettings = Seq(
-  assemblyJarName in assembly := name.value + ".jar")
+  assemblyJarName in assembly := name.value + "-" + version.value + ".jar")
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case _                             => MergeStrategy.first
+}
