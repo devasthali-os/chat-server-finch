@@ -1,5 +1,5 @@
 name := "chatServerParent"
-//organization in ThisBuild := "com.chat"
+organization in ThisBuild := "com.chat.server"
 scalaVersion in ThisBuild := "2.12.5"
 
 lazy val chatServerParent = project

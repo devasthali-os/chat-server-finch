@@ -10,7 +10,7 @@ import io.finch.syntax._
 import io.circe.generic.auto._
 import com.twitter.util.Future
 import org.slf4j.LoggerFactory
-import com.chat.schema.{ChatRequest, ChatResponse}
+import com.chat.server.schema.{ChatRequest, ChatResponse}
 import com.twitter.finagle.http.{Request, Response}
 
 import scala.concurrent.ExecutionContext.Implicits.global

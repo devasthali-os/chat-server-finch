@@ -1,6 +1,6 @@
 package com.chat.server
 
-import com.chat.schema.{ChatRequest, ChatResponse}
+import com.chat.server.schema.{ChatRequest, ChatResponse}
 import com.chat.server.NluService.IntentResponse
 
 import scala.concurrent.{ExecutionContext, Future}

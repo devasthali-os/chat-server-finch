@@ -77,14 +77,16 @@ Perf
 TODOs
 -----
 
-1) pass in app properties like `-environment=dev`
+1) pass in app properties like `-environment=dev` jar running inside docker
 
 ~~2) add typesafe config to read intent-names~~
 
-3) expose client-api as a `chat-server-client.jar`
+3) expose client-api as a `chat-server-client.jar`, make sure it can be used as sbt deps
 
 4) logging
 
 5) add swagger
 
 6) Websocket - https://github.com/finagle/finagle-websocket
+
+7) don't create jar for root

@@ -1,4 +1,4 @@
-package com.chat.schema
+package com.chat.server.schema
 
 final case class ChatRequest(correlationID: String, message: String)
 

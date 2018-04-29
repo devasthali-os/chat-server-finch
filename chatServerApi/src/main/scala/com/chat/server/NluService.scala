@@ -1,6 +1,6 @@
 package com.chat.server
 
-import com.chat.schema.ChatRequest
+import com.chat.server.schema.ChatRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
