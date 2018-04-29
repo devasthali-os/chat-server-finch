@@ -22,8 +22,8 @@ WARNING: Can not service-load a timer. Using JavaTimer instead.
 run using docker
 ----------------
 
-```
-docker build -t chat-server .
+```bash
+sbt assembly; docker build -t chat-server .
 
 docker run -p 9090:9090 --name chat-server chat-server -e environment=stage
 ```
@@ -36,7 +36,7 @@ curl -H "correlationID: 12345678" localhost:9090/init
 coffee intent
 -------------
 
-```
+```bash
 curl -v -H "x-user: prayagupd" -H "x-client-version: 1.0" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "coffee near me"}' localhost:9090/chat
 *   Trying ::1...
 * TCP_NODELAY set
@@ -64,7 +64,7 @@ curl -v -H "x-user: prayagupd" -H "x-client-version: 1.0" -d '{"correlationID": 
 un-recognised intent
 --------------------
 
-```
+```bash
 curl -H "x-user: prayagupd" -H "x-client-version: 1.0" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "can i know about renters insurance"}' localhost:9090/chat
 {"correlationID":"9c327ed6-05ad-4df6-beab-875c33906aab","displayText":"Did not understand you"}
 ```
@@ -86,3 +86,5 @@ TODOs
 4) logging
 
 5) add swagger
+
+6) Websocket - https://github.com/finagle/finagle-websocket

@@ -2,7 +2,7 @@ package com.chat.server
 
 import java.util.UUID
 
-import com.twitter.finagle.Http
+import com.twitter.finagle.{Http, Service}
 import com.twitter.util.Await
 import io.finch._
 import io.finch.circe._
@@ -11,6 +11,7 @@ import io.circe.generic.auto._
 import com.twitter.util.Future
 import org.slf4j.LoggerFactory
 import com.chat.schema.{ChatRequest, ChatResponse}
+import com.twitter.finagle.http.{Request, Response}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
@@ -22,9 +23,9 @@ object ChatServer {
   def main(args: Array[String]): Unit = {
 
     trait InitResponse
-    case class ChatInitResponse(correlationID: String, message: String)
+    final case class ChatInitResponse(correlationID: String, message: String)
         extends InitResponse
-    case class InvalidResponse(error: String) extends InitResponse
+    final case class InvalidResponse(error: String) extends InitResponse
 
     val chatInitHeader: Endpoint[String] =
       header("x-correlation-id").mapOutputAsync(id => {
@@ -64,7 +65,8 @@ object ChatServer {
           }
       }
 
-    val endpoints = (heartbeat :+: chatInit :+: chat).toService
+    val endpoints: Service[Request, Response] =
+      (heartbeat :+: chatInit :+: chat).toService
 
     Await.ready(Http.server.serve(":9090", endpoints))
 

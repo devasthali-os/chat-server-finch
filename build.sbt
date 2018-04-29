@@ -10,6 +10,7 @@ lazy val chatServerParent = project
 lazy val chatServerSchema =
   project.settings(name := "chatServerSchema",
                    settings,
+                   apiSchemaAssemblySettings,
                    libraryDependencies ++= commonDependencies)
 
 val NettyVersion = "4.1.16.Final"
@@ -18,7 +19,7 @@ lazy val chatServerApi = project
   .settings(
     name := "chatServerApi",
     settings,
-    assemblySettings,
+    apiAssemblySettings,
     libraryDependencies ++= Seq(
       "com.github.finagle" %% "finch-core" % "0.18.0"
         exclude ("io.netty", "netty-transport-native-unix-common")
@@ -47,11 +48,13 @@ lazy val chatServerApi = project
       "io.netty" % "netty-transport-native-epoll" % NettyVersion,
       "io.netty" % "netty-tcnative-boringssl-static" % "2.0.6.Final",
       "io.netty" % "netty-codec-socks" % NettyVersion,
+      "io.swagger" % "swagger-codegen" % "2.3.1",
       "io.circe" %% "circe-generic" % "0.9.3",
       "com.typesafe" % "config" % "1.3.3",
       "ch.qos.logback" % "logback-classic" % "1.2.3"
     )
   )
+  //.enablePlugins(SwaggerCodegenPlugin)
   .dependsOn(chatServerSchema)
 
 //lazy val dependencies =
@@ -92,17 +95,13 @@ lazy val commonSettings = Seq(
 )
 
 lazy val wartremoverSettings = Seq(
-  wartremoverWarnings in (Compile, compile) ++= Warts.allBut(Wart.Throw)
-)
+  wartremoverWarnings in (Compile, compile) ++= Warts.allBut(Wart.Throw))
 
-lazy val scalafmtSettings =
-  Seq(
-    scalafmtOnCompile := true,
-    scalafmtTestOnCompile := true,
-    scalafmtVersion := "1.2.0"
-  )
+lazy val scalafmtSettings = Seq(scalafmtOnCompile := true,
+                                scalafmtTestOnCompile := true,
+                                scalafmtVersion := "1.2.0")
 
-lazy val assemblySettings = Seq(
+lazy val apiAssemblySettings = Seq(
   assemblyJarName in assembly := name.value + ".jar",
   mainClass in assembly := Some("com.chat.server.ChatServer"),
   assemblyMergeStrategy in assembly := {
@@ -110,3 +109,6 @@ lazy val assemblySettings = Seq(
     case _                             => MergeStrategy.first
   }
 )
+
+lazy val apiSchemaAssemblySettings = Seq(
+  assemblyJarName in assembly := name.value + ".jar")

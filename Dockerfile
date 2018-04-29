@@ -16,7 +16,7 @@ CMD ls -l /opt/java8
 ENV JAVA_HOME /opt/java8
 ENV PATH $JAVA_HOME/bin:$PATH
 
-COPY target/scala-2.12/chat-server.jar /home/chat-server.jar
+COPY chatServerApi/target/scala-2.12/chatServerApi.jar /home/chatServerApi.jar
 
 EXPOSE 9090
-ENTRYPOINT ["java", "-jar", "/home/chat-server.jar"]
+ENTRYPOINT ["java", "-jar", "/home/chatServerApi.jar"]
