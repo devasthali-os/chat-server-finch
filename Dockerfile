@@ -19,7 +19,7 @@ ENV PATH $JAVA_HOME/bin:$PATH
 COPY deployment.sh /home/deployment.sh
 RUN chmod +x /home/deployment.sh
 
-COPY chatServerApi/target/scala-2.12/chatServerApi.jar /home/chatServerApi.jar
+COPY chatServerApi/target/scala-2.12/chatServerApi*.jar /home/
 
 EXPOSE 9090
 ENTRYPOINT ["/home/deployment.sh"]

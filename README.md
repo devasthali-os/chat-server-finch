@@ -79,6 +79,8 @@ TODOs
 
 1) pass in app properties like `-environment=dev` jar running inside docker
 
+2) version docker images
+
 ~~2) add typesafe config to read intent-names~~
 
 ~~3) expose client-api as a `chat-server-client.jar` (to maven not ivy), make sure it can be used as sbt deps - https://github.com/duwamish-os/chat-server-api-client~~

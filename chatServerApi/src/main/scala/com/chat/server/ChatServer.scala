@@ -23,7 +23,9 @@ import scala.util.{Failure, Success}
 import io.finch.syntax.scalaFutures._
 
 trait ChatServer {
-  def chat(user: String, version: String, chatRequest: ChatRequest): concurrent.Future[ChatResponse]
+  def chat(user: String,
+           version: String,
+           chatRequest: ChatRequest): concurrent.Future[ChatResponse]
 }
 
 object ChatServer extends ChatServer {
@@ -34,8 +36,8 @@ object ChatServer extends ChatServer {
     scala.concurrent.Future.successful(
       Ok(
         HeartbeatResponse(AppConfig.AppName,
-          AppConfig.AppVersion,
-          AppConfig.AppEnvironment)))
+                          AppConfig.AppVersion,
+                          AppConfig.AppEnvironment)))
   }
 
   def chatInitHeader: Endpoint[String] =
@@ -51,7 +53,9 @@ object ChatServer extends ChatServer {
           .withHeader("version", version)
     }
 
-  def chat(user: String, version: String, chatRequest: ChatRequest): concurrent.Future[ChatResponse] = {
+  def chat(user: String,
+           version: String,
+           chatRequest: ChatRequest): concurrent.Future[ChatResponse] = {
     logger.info(s"request: $chatRequest")
     ChatPipeline.pipeline(chatRequest)
   }

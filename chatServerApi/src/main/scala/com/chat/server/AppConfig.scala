@@ -4,7 +4,9 @@ import com.typesafe.config.{Config, ConfigFactory}
 
 object AppConfig {
 
-  private val environment = System.getProperty("environment", "dev")
+  println(System.getProperties)
+
+  private val environment = System.getProperty("APP_ENVIRONMENT", "dev")
 
   private val config: Config =
     ConfigFactory.load("application.conf").getConfig("app")
