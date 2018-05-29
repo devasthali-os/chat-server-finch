@@ -25,7 +25,7 @@ run using docker
 ```bash
 sbt assembly; docker build -t chat-server .
 
-docker run -p 9090:9090 --name chat-server chat-server -e environment=stage
+docker run -e environment=stage -p 9090:9090 --name chat-server chat-server
 ```
 
 ```
@@ -37,7 +37,7 @@ coffee intent
 -------------
 
 ```bash
-curl -v -H "x-user: prayagupd" -H "x-client-version: 1.0" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "coffee near me"}' localhost:9090/chat
+curl -v -H "x-user: prayagupd" -H "x-client-version: 1.0" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "coffee near me"}' localhost:9090/api/chat
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 9090 (#0)

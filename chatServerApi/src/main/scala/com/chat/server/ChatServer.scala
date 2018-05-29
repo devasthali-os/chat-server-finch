@@ -63,13 +63,12 @@ object ChatServer extends ChatServer {
   def main(args: Array[String]): Unit = {
 
     val chatEndpoint: Endpoint[ChatResponse] =
-      post(
-        "chat"
-          :: header("x-user")
-          :: header("x-client-version")
-          :: jsonBody[ChatRequest]) {
+      post("api" :: "chat" :: header("x-user").should("be present") { _.length > 5 } :: header("x-client-version") :: jsonBody[ChatRequest]) {
         (user: String, version: String, chatRequest: ChatRequest) =>
-          chat(user, version, chatRequest).map(Ok) andThen {
+          val chatResp: concurrent.Future[ChatResponse] =
+            chat(user, version, chatRequest)
+
+          chatResp.map(Ok) andThen {
             case Success(s) => logger.info(s"response: $s")
             case Failure(e) => logger.info(s"error: $e")
           }
