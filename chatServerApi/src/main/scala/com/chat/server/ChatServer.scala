@@ -36,8 +36,8 @@ object ChatServer extends ChatServer {
     scala.concurrent.Future.successful(
       Ok(
         HeartbeatResponse(AppConfig.AppName,
-                          AppConfig.AppVersion,
-                          AppConfig.AppEnvironment)))
+          AppConfig.AppVersion,
+          AppConfig.AppEnvironment)))
   }
 
   def chatInitHeader: Endpoint[String] =
@@ -47,11 +47,15 @@ object ChatServer extends ChatServer {
     })
 
   val chatInit: Endpoint[ChatInitResponse] =
-    get("init" :: header("x-correlation-id") :: header("x-version")) {
+    get("chat" :: "init" :: header("x-correlation-id") :: header("x-version")) {
       (id: String, version: String) =>
         Ok(ChatInitResponse(id, "Hi, How can I help you?"))
           .withHeader("version", version)
     }
+
+  val chatHistory = get("chat" :: "history" :: param[String]("abc")) { (abc: String) =>
+    Ok(abc)
+  }
 
   def chat(user: String,
            version: String,
@@ -63,7 +67,9 @@ object ChatServer extends ChatServer {
   def main(args: Array[String]): Unit = {
 
     val chatEndpoint: Endpoint[ChatResponse] =
-      post("api" :: "chat" :: header("x-user").should("be present") { _.length > 5 } :: header("x-client-version") :: jsonBody[ChatRequest]) {
+      post("api" :: "chat" :: header("x-user").should("be present") {
+        _.length > 5
+      } :: header("x-client-version") :: jsonBody[ChatRequest]) {
         (user: String, version: String, chatRequest: ChatRequest) =>
           val chatResp: concurrent.Future[ChatResponse] =
             chat(user, version, chatRequest)
@@ -75,7 +81,7 @@ object ChatServer extends ChatServer {
       }
 
     val endpoints: Service[Request, Response] =
-      (heartbeat :+: chatInit :+: chatEndpoint).toService
+      (heartbeat :+: chatInit :+: chatHistory :+: chatEndpoint).toService
 
     Await.ready(Http.server.serve(":9090", endpoints))
 
