@@ -1,6 +1,6 @@
 name := "chatServerParent"
 organization in ThisBuild := "com.chat.server"
-scalaVersion in ThisBuild := "2.12.5"
+scalaVersion in ThisBuild := "2.12.6"
 
 version := "1.0-SNAPSHOT"
 
@@ -48,6 +48,8 @@ lazy val chatServerSchema =
   )
 
 val NettyVersion = "4.1.16.Final"
+val BoringSSlVersion = "2.0.6.Final"
+val FinchVersion = "0.21.0"
 
 lazy val chatServerApi = project
   .settings(
@@ -55,7 +57,7 @@ lazy val chatServerApi = project
     settings,
     apiAssemblySettings,
     libraryDependencies ++= Seq(
-      "com.github.finagle" %% "finch-core" % "0.18.0"
+      "com.github.finagle" %% "finch-core" % FinchVersion
         exclude ("io.netty", "netty-transport-native-unix-common")
         exclude ("io.netty", "netty-codec-http")
         exclude ("io.netty", "netty-codec-http2")
@@ -68,7 +70,7 @@ lazy val chatServerApi = project
         exclude ("io.netty", "netty-tcnative-boringssl-static")
         exclude ("io.netty", "netty-transport-native-epoll")
         exclude ("io.netty", "netty-handler-proxy"),
-      "com.github.finagle" %% "finch-circe" % "0.18.0",
+      "com.github.finagle" %% "finch-circe" % FinchVersion,
       "io.netty" % "netty-codec" % NettyVersion,
       "io.netty" % "netty-codec-http" % NettyVersion,
       "io.netty" % "netty-codec-http2" % NettyVersion,
@@ -80,7 +82,7 @@ lazy val chatServerApi = project
       "io.netty" % "netty-handler-proxy" % NettyVersion,
       "io.netty" % "netty-transport-native-unix-common" % NettyVersion,
       "io.netty" % "netty-transport-native-epoll" % NettyVersion,
-      "io.netty" % "netty-tcnative-boringssl-static" % "2.0.6.Final",
+      "io.netty" % "netty-tcnative-boringssl-static" % BoringSSlVersion,
       "io.netty" % "netty-codec-socks" % NettyVersion,
       "io.swagger" % "swagger-codegen" % "2.3.1",
       "io.circe" %% "circe-generic" % "0.9.3",

@@ -36,8 +36,8 @@ object ChatServer extends ChatServer {
     scala.concurrent.Future.successful(
       Ok(
         HeartbeatResponse(AppConfig.AppName,
-          AppConfig.AppVersion,
-          AppConfig.AppEnvironment)))
+                          AppConfig.AppVersion,
+                          AppConfig.AppEnvironment)))
   }
 
   def chatInitHeader: Endpoint[String] =
@@ -53,8 +53,9 @@ object ChatServer extends ChatServer {
           .withHeader("version", version)
     }
 
-  val chatHistory = get("chat" :: "history" :: param[String]("abc")) { (abc: String) =>
-    Ok(abc)
+  val chatHistory = get("chat" :: "history" :: param[String]("abc")) {
+    (abc: String) =>
+      Ok(abc)
   }
 
   def chat(user: String,

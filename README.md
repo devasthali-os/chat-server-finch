@@ -69,6 +69,9 @@ curl -H "x-user: prayagupd" -H "x-client-version: 1.0" -d '{"correlationID": "9c
 {"correlationID":"9c327ed6-05ad-4df6-beab-875c33906aab","displayText":"Did not understand you"}
 ```
 
+```
+curl -v --request GET localhost:9090/chat/history?abc=1
+```
 
 Perf
 ----
