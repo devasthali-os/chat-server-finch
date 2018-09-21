@@ -29,7 +29,7 @@ docker run -e environment=stage -p 9090:9090 --name chat-server chat-server
 ```
 
 ```
-curl -H "correlationID: 12345678" localhost:9090/init
+curl -v -H "x-correlation-id: 12345678" -H "x-version: 1.0" localhost:9090/chat/init
 {"correlationID":"94da2874-956e-4f3a-acb6-850df37adbb9","message":"Hi, How can I help you?"}
 ```
 

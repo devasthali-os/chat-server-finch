@@ -49,7 +49,7 @@ lazy val chatServerSchema =
 
 val NettyVersion = "4.1.16.Final"
 val BoringSSlVersion = "2.0.6.Final"
-val FinchVersion = "0.21.0"
+val FinchVersion = "0.24.0"
 
 lazy val chatServerApi = project
   .settings(
