@@ -76,6 +76,73 @@ curl -v --request GET localhost:9090/chat/history?abc=1
 Perf
 ----
 
+```
+ab -c 50 -n 1000 --request POST -H "x-user: prayagupd" -H "x-client-version: upd" -H "application/json" -p chat_request.json localhost:9090/api/chat
+```
+
+
+```
+ab -c 10 -n 1000 -H "x-user: prayagupd" -H "x-client-version: upd" -T "application/json" -p chat_request.json localhost:9090/api/chat
+This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        Finch
+Server Hostname:        localhost
+Server Port:            9090
+
+Document Path:          /api/chat
+Document Length:        110 bytes
+
+Concurrency Level:      10
+Time taken for tests:   1.064 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      253000 bytes
+Total body sent:        271000
+HTML transferred:       110000 bytes
+Requests per second:    940.13 [#/sec] (mean)
+Time per request:       10.637 [ms] (mean)
+Time per request:       1.064 [ms] (mean, across all concurrent requests)
+Transfer rate:          232.28 [Kbytes/sec] received
+                        248.80 kb/s sent
+                        481.08 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1   1.6      1       9
+Processing:     3    9   4.5      8      35
+Waiting:        1    8   4.5      7      34
+Total:          4   10   4.5      9      36
+
+Percentage of the requests served within a certain time (ms)
+  50%      9
+  66%     11
+  75%     12
+  80%     13
+  90%     16
+  95%     19
+  98%     22
+  99%     25
+ 100%     36 (longest request)
+
+```
+
+![](finch_1000.png)
 
 TODOs
 -----
