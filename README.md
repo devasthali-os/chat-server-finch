@@ -144,6 +144,70 @@ Percentage of the requests served within a certain time (ms)
 
 ![](finch_1000.png)
 
+
+100K
+----
+
+```
+ab -c 100 -n 100000 -H "x-user: prayagupd" -H "x-client-version: upd" -T "application/json" -p chat_request.json localhost:9090/api/chat
+This is ApacheBench, Version 2.3 <$Revision: 1826891 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 10000 requests
+Completed 20000 requests
+Completed 30000 requests
+Completed 40000 requests
+Completed 50000 requests
+Completed 60000 requests
+Completed 70000 requests
+Completed 80000 requests
+Completed 90000 requests
+Completed 100000 requests
+Finished 100000 requests
+
+
+Server Software:        Finch
+Server Hostname:        localhost
+Server Port:            9090
+
+Document Path:          /api/chat
+Document Length:        110 bytes
+
+Concurrency Level:      100
+Time taken for tests:   236.887 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      25300000 bytes
+Total body sent:        27100000
+HTML transferred:       11000000 bytes
+Requests per second:    422.14 [#/sec] (mean)
+Time per request:       236.887 [ms] (mean)
+Time per request:       2.369 [ms] (mean, across all concurrent requests)
+Transfer rate:          104.30 [Kbytes/sec] received
+                        111.72 kb/s sent
+                        216.02 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0  164 1409.0     45   23071
+Processing:     0   69 101.9     52    1671
+Waiting:        0   53  86.8     40    1651
+Total:          1  233 1411.0     97   23113
+
+Percentage of the requests served within a certain time (ms)
+  50%     97
+  66%    119
+  75%    135
+  80%    145
+  90%    189
+  95%    292
+  98%    739
+  99%   1321
+ 100%  23113 (longest request)
+```
+
 TODOs
 -----
 
