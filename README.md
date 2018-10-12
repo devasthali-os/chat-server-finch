@@ -11,7 +11,7 @@ sbt clean assembly
 run locally
 
 ```bash
-java -jar chatServerApi/target/scala-2.12/chatServerApi.jar
+java -jar chatServerApi/target/scala-2.12/chatServerApi-1.0-SNAPSHOT.jar
 Apr 26, 2018 11:33:39 PM com.twitter.finagle.Init$ $anonfun$once$1
 INFO: Finagle version 18.3.0 (rev=87424ce8cee3075f9140082a0f91b4a3256a1f50) built at 20180306-113908
 Apr 26, 2018 11:33:39 PM com.twitter.finagle.util.DefaultTimer$ <init>
@@ -37,40 +37,41 @@ coffee intent
 -------------
 
 ```bash
-curl -v -H "x-user: prayagupd" -H "x-client-version: 1.0" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "coffee near me"}' localhost:9090/api/chat
+curl -v -H "x-user: prayagupd" -H "x-client-version: 1.0" -H "Content-Type: application/json" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "coffee near me"}' localhost:9090/api/chat
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 9090 (#0)
-> POST /chat HTTP/1.1
+> POST /api/chat HTTP/1.1
 > Host: localhost:9090
 > User-Agent: curl/7.54.0
 > Accept: */*
 > x-user: prayagupd
 > x-client-version: 1.0
+> Content-Type: application/json
 > Content-Length: 86
-> Content-Type: application/x-www-form-urlencoded
 >
 * upload completely sent off: 86 out of 86 bytes
 < HTTP/1.1 200 OK
-< Date: Fri, 27 Apr 2018 05:41:15 GMT
+< Date: Fri, 12 Oct 2018 04:08:53 GMT
 < Server: Finch
-< Content-Length: 94
+< Content-Length: 110
 < Content-Type: application/json
 <
 * Connection #0 to host localhost left intact
-{"correlationID":"9c327ed6-05ad-4df6-beab-875c33906aab","displayText":"Here are coffee shops"}
+{"correlationID":"9c327ed6-05ad-4df6-beab-875c33906aab","displayText":"Here are coffee shops","version":"1.0"}
 ```
 
 un-recognised intent
 --------------------
 
 ```bash
-curl -H "x-user: prayagupd" -H "x-client-version: 1.0" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "can i know about renters insurance"}' localhost:9090/chat
-{"correlationID":"9c327ed6-05ad-4df6-beab-875c33906aab","displayText":"Did not understand you"}
+curl -H "x-user: prayagupd" -H "x-client-version: 1.0" -H "Content-Type: application/json" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "can i know about renters insurance"}' localhost:9090/api/chat
+{"correlationID":"9c327ed6-05ad-4df6-beab-875c33906aab","displayText":"Did not understand you","version":"1.0"}
 ```
 
 ```
 curl -v --request GET localhost:9090/chat/history?abc=1
+"1"
 ```
 
 Perf

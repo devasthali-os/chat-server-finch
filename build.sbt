@@ -1,8 +1,8 @@
 name := "chatServerParent"
 organization in ThisBuild := "com.chat.server"
-scalaVersion in ThisBuild := "2.12.6"
+scalaVersion in ThisBuild := "2.12.7"
 
-version := "1.0-SNAPSHOT"
+version in ThisBuild := "1.0-SNAPSHOT"
 
 lazy val chatServerParent = project
   .in(file("."))
@@ -49,7 +49,7 @@ lazy val chatServerSchema =
 
 val NettyVersion = "4.1.16.Final"
 val BoringSSlVersion = "2.0.6.Final"
-val FinchVersion = "0.23.0"
+val FinchVersion = "0.24.0"
 
 lazy val chatServerApi = project
   .settings(
@@ -85,7 +85,7 @@ lazy val chatServerApi = project
       "io.netty" % "netty-tcnative-boringssl-static" % BoringSSlVersion,
       "io.netty" % "netty-codec-socks" % NettyVersion,
       "io.swagger" % "swagger-codegen" % "2.3.1",
-      "io.circe" %% "circe-generic" % "0.9.3",
+      "io.circe" %% "circe-generic" % "0.10.0",
       "com.typesafe" % "config" % "1.3.3",
       "ch.qos.logback" % "logback-classic" % "1.2.3"
     )
