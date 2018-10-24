@@ -1,7 +1,5 @@
 package com.chat.server
 
-import java.util.UUID
-
 import cats.effect.IO
 
 //import com.chat.server.httpclient.ChatServerEndpoints
@@ -61,13 +59,21 @@ object ChatServer extends ChatServer with Endpoint.Module[IO] {
   final case class InternalApiError(id: String, description: String)
       extends ApiError
 
-//  val chatHistory: Endpoint[IO, Either[InternalApiError, History]] =
-//    get("chat" :: "history" :: param[String]("correlationId")) {
-//      (correlationId: String) =>
-//        Ok(Right(History(id = correlationId)))
-//    } handle {
-//      case e => Ok(Left[InternalApiError, History](InternalApiError("a", "b")))
-//    }
+  type ChatHistory[a] = Either[InternalApiError, a]
+
+  val chatHistory: Endpoint[IO, ChatHistory[History]] =
+    get("chat" :: "history" :: param[String]("correlationId")) {
+      (correlationId: String) =>
+        val result: Either[InternalApiError, History] =
+          Right(History(id = correlationId))
+
+        Ok(result)
+    } handle {
+      case e =>
+        val res: Either[InternalApiError, History] =
+          Left(InternalApiError("a", "b"))
+        Ok(res)
+    }
 
   def chat(user: String,
            version: String,
@@ -93,7 +99,7 @@ object ChatServer extends ChatServer with Endpoint.Module[IO] {
       }
 
     val endpoints: Service[Request, Response] =
-      (heartbeat :+: chatInit :+: chatEndpoint).toService
+      (heartbeat :+: chatInit :+: chatHistory :+: chatEndpoint).toService
 
     Await.ready(Http.server.serve(":9090", endpoints))
 
