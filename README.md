@@ -23,7 +23,7 @@ run using docker
 ----------------
 
 ```bash
-sbt assembly; docker build -t chat-server .
+sbt assembly; docker build -t chat-server:1.0 .
 
 docker run -e environment=stage -p 9090:9090 --name chat-server chat-server
 ```
@@ -70,8 +70,8 @@ curl -H "x-user: prayagupd" -H "x-client-version: 1.0" -H "Content-Type: applica
 ```
 
 ```
-curl -v --request GET localhost:9090/chat/history?abc=1
-"1"
+curl -v --request GET localhost:9090/chat/history?correlationId=1
+{"Right":{"value":{"id":"1"}}}
 ```
 
 Perf
@@ -218,9 +218,10 @@ TODOs
 
 ~~2) add typesafe config to read intent-names~~
 
-~~3) expose client-api as a `chat-server-client.jar` (to maven not ivy), make sure it can be used as sbt deps - https://github.com/duwamish-os/chat-server-api-client~~
+~~3) expose client-api as a `chat-server-client.jar` (to maven not ivy), 
+     make sure it can be used as sbt deps - https://github.com/duwamish-os/chat-server-api-client~~
 
-4) provide http-client
+4) provide http-client for API
 
 5) logging
 

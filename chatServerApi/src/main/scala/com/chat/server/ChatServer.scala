@@ -53,10 +53,21 @@ object ChatServer extends ChatServer {
           .withHeader("version", version)
     }
 
-  val chatHistory = get("chat" :: "history" :: param[String]("abc")) {
-    (abc: String) =>
-      Ok(abc)
-  }
+  import io.finch.Error.{NotPresent, NotValid}
+
+  final case class History(id: String)
+  trait ApiError
+  final case class InvalidReq(id: String, description: String) extends ApiError
+  final case class InternalApiError(id: String, description: String)
+      extends ApiError
+
+  val chatHistory: Endpoint[Either[Int, History]] =
+    get("chat" :: "history" :: param[String]("correlationId")) {
+      (correlationId: String) =>
+        Ok(Right(History(id = correlationId)))
+    } handle {
+      case e => Ok(Left(-1))
+    }
 
   def chat(user: String,
            version: String,
