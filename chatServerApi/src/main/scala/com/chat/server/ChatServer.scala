@@ -2,6 +2,8 @@ package com.chat.server
 
 import java.util.UUID
 
+import cats.effect.IO
+
 //import com.chat.server.httpclient.ChatServerEndpoints
 import com.chat.server.schema.{
   ChatInitResponse,
@@ -15,12 +17,10 @@ import com.twitter.util.{Await, Future}
 import io.circe.generic.auto._
 import io.finch._
 import io.finch.circe._
-import io.finch.syntax._
 import org.slf4j.LoggerFactory
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success}
-import io.finch.syntax.scalaFutures._
+import io.finch.catsEffect._
 
 trait ChatServer {
   def chat(user: String,
@@ -28,25 +28,25 @@ trait ChatServer {
            chatRequest: ChatRequest): concurrent.Future[ChatResponse]
 }
 
-object ChatServer extends ChatServer {
+object ChatServer extends ChatServer with Endpoint.Module[IO] {
 
   private val logger = LoggerFactory.getLogger("ChatServer")
 
-  val heartbeat: Endpoint[HeartbeatResponse] = get("heartbeat") {
-    scala.concurrent.Future.successful(
-      Ok(
-        HeartbeatResponse(AppConfig.AppName,
-                          AppConfig.AppVersion,
-                          AppConfig.AppEnvironment)))
+  val heartbeat: Endpoint[IO, HeartbeatResponse] = get("heartbeat") {
+    Ok(
+      HeartbeatResponse(AppConfig.AppName,
+                        AppConfig.AppVersion,
+                        AppConfig.AppEnvironment)
+    )
   }
 
-  def chatInitHeader: Endpoint[String] =
-    header("x-correlation-id").mapOutputAsync(id => {
-      if (id == null) Future.value(Ok("Invalid correlationID"))
-      else Future.value(Ok(UUID.randomUUID().toString))
-    })
+//  def chatInitHeader: Endpoint[IO, String] =
+//    header("x-correlation-id").mapOutputAsync(id => {
+//      if (id == null) Ok("Invalid correlationID")
+//      else Ok(UUID.randomUUID().toString)
+//    })
 
-  val chatInit: Endpoint[ChatInitResponse] =
+  val chatInit: Endpoint[IO, ChatInitResponse] =
     get("chat" :: "init" :: header("x-correlation-id") :: header("x-version")) {
       (id: String, version: String) =>
         Ok(ChatInitResponse(id, "Hi, How can I help you?"))
@@ -61,13 +61,13 @@ object ChatServer extends ChatServer {
   final case class InternalApiError(id: String, description: String)
       extends ApiError
 
-  val chatHistory: Endpoint[Either[Int, History]] =
-    get("chat" :: "history" :: param[String]("correlationId")) {
-      (correlationId: String) =>
-        Ok(Right(History(id = correlationId)))
-    } handle {
-      case e => Ok(Left(-1))
-    }
+//  val chatHistory: Endpoint[IO, Either[InternalApiError, History]] =
+//    get("chat" :: "history" :: param[String]("correlationId")) {
+//      (correlationId: String) =>
+//        Ok(Right(History(id = correlationId)))
+//    } handle {
+//      case e => Ok(Left[InternalApiError, History](InternalApiError("a", "b")))
+//    }
 
   def chat(user: String,
            version: String,
@@ -78,7 +78,7 @@ object ChatServer extends ChatServer {
 
   def main(args: Array[String]): Unit = {
 
-    val chatEndpoint: Endpoint[ChatResponse] =
+    val chatEndpoint: Endpoint[IO, ChatResponse] =
       post("api" :: "chat" :: header("x-user").should("be present") {
         _.length > 5
       } :: header("x-client-version") :: jsonBody[ChatRequest]) {
@@ -86,14 +86,14 @@ object ChatServer extends ChatServer {
           val chatResp: concurrent.Future[ChatResponse] =
             chat(user, version, chatRequest)
 
-          chatResp.map(Ok) andThen {
-            case Success(s) => logger.info(s"response: $s")
-            case Failure(e) => logger.info(s"error: $e")
+          IO.fromFuture(IO(chatResp)).map { res =>
+            logger.info(s"response: $res")
+            Ok(res)
           }
       }
 
     val endpoints: Service[Request, Response] =
-      (heartbeat :+: chatInit :+: chatHistory :+: chatEndpoint).toService
+      (heartbeat :+: chatInit :+: chatEndpoint).toService
 
     Await.ready(Http.server.serve(":9090", endpoints))
 

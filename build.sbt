@@ -50,6 +50,7 @@ lazy val chatServerSchema =
 val NettyVersion = "4.1.16.Final"
 val BoringSSlVersion = "2.0.6.Final"
 val FinchVersion = "0.25.0"
+val CirceVersion = "0.10.0"
 
 lazy val chatServerApi = project
   .settings(
@@ -57,7 +58,8 @@ lazy val chatServerApi = project
     settings,
     apiAssemblySettings,
     libraryDependencies ++= Seq(
-      "com.github.finagle" %% "finch-core" % FinchVersion
+      //"com.github.finagle" %% "finch-core" % FinchVersion
+      "com.github.finagle" %% "finchx-circe" % FinchVersion
         exclude ("io.netty", "netty-transport-native-unix-common")
         exclude ("io.netty", "netty-codec-http")
         exclude ("io.netty", "netty-codec-http2")
@@ -70,7 +72,8 @@ lazy val chatServerApi = project
         exclude ("io.netty", "netty-tcnative-boringssl-static")
         exclude ("io.netty", "netty-transport-native-epoll")
         exclude ("io.netty", "netty-handler-proxy"),
-      "com.github.finagle" %% "finch-circe" % FinchVersion,
+      //"com.github.finagle" %% "finch-circe" % FinchVersion,
+      "com.github.finagle" %% "finchx-circe" % FinchVersion,
       "io.netty" % "netty-codec" % NettyVersion,
       "io.netty" % "netty-codec-http" % NettyVersion,
       "io.netty" % "netty-codec-http2" % NettyVersion,
@@ -85,7 +88,7 @@ lazy val chatServerApi = project
       "io.netty" % "netty-tcnative-boringssl-static" % BoringSSlVersion,
       "io.netty" % "netty-codec-socks" % NettyVersion,
       "io.swagger" % "swagger-codegen" % "2.3.1",
-      "io.circe" %% "circe-generic" % "0.10.0",
+      "io.circe" %% "circe-generic" % CirceVersion,
       "com.typesafe" % "config" % "1.3.3",
       "ch.qos.logback" % "logback-classic" % "1.2.3"
     )
