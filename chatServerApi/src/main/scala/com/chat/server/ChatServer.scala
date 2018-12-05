@@ -63,7 +63,7 @@ object ChatServer extends ChatServer with Endpoint.Module[IO] {
 
   val chatHistory: Endpoint[IO, ChatHistory[History]] =
     get("chat" :: "history" :: param[String]("correlationId")) {
-      (correlationId: String) =>
+      correlationId: String =>
         val result: Either[InternalApiError, History] =
           Right(History(id = correlationId))
 
@@ -99,9 +99,11 @@ object ChatServer extends ChatServer with Endpoint.Module[IO] {
       }
 
     val endpoints: Service[Request, Response] =
-      (heartbeat :+: chatInit :+: chatHistory :+: chatEndpoint).toService
+      ServerOps.server.andThen(
+        (heartbeat :+: chatInit :+: chatHistory :+: chatEndpoint).toService
+      )
 
-    Await.ready(Http.server.serve(":9090", endpoints))
+    Await.ready(Http.server.serve(":8080", endpoints))
 
   }
 }
