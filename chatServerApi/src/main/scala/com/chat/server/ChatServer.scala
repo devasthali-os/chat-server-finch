@@ -1,6 +1,7 @@
 package com.chat.server
 
 import cats.effect.IO
+import cats.data.Kleisli
 
 //import com.chat.server.httpclient.ChatServerEndpoints
 import com.chat.server.schema.{
@@ -98,12 +99,14 @@ object ChatServer extends ChatServer with Endpoint.Module[IO] {
           }
       }
 
-    val endpoints: Service[Request, Response] =
-      ServerOps.server.andThen(
-        (heartbeat :+: chatInit :+: chatHistory :+: chatEndpoint).toService
-      )
+    val service = io.finch.Bootstrap
+      .serve[Application.Json](
+        heartbeat :+: chatInit :+: chatHistory :+: chatEndpoint)
+      .compile
 
-    //val service = io.finch.Bootstrap.serve(heartbeat)
+    val endpoints: Service[Request, Response] =
+      Endpoint.toService(ServerOps.authFilter.andThen(service))
+
     Await.ready(Http.server.serve(":8080", endpoints))
 
   }

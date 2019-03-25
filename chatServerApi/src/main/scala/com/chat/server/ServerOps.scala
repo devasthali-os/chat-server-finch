@@ -1,5 +1,7 @@
 package com.chat.server
 
+import cats.data.Kleisli
+import cats.effect.IO
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.util.{Base64StringEncoder, Future}
@@ -22,4 +24,11 @@ object ServerOps {
   }
 
   def server: AuthOps = new AuthOps
+
+  val authFilter = Kleisli.ask[IO, Request].andThen { req =>
+    req.headerMap.get("x-api-key") match {
+      case Some(headerValue) if headerValue == "api-secret" => IO.pure(req)
+      case _                                                => IO.raiseError(new IllegalStateException())
+    }
+  }
 }
