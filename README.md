@@ -37,7 +37,7 @@ coffee intent
 -------------
 
 ```bash
-curl -v -H "x-user: prayagupd" -H "x-client-version: 1.0" -H "Content-Type: application/json" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "coffee near me"}' localhost:9090/api/chat
+curl -v -H "x-api-key: api-secret" -H "x-user: prayagupd" -H "x-client-version: 1.0" -H "Content-Type: application/json" -d '{"correlationID": "9c327ed6-05ad-4df6-beab-875c33906aab", "message": "coffee near me"}' localhost:9090/api/chat
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 9090 (#0)

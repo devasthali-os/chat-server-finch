@@ -103,6 +103,7 @@ object ChatServer extends ChatServer with Endpoint.Module[IO] {
         (heartbeat :+: chatInit :+: chatHistory :+: chatEndpoint).toService
       )
 
+    //val service = io.finch.Bootstrap.serve(heartbeat)
     Await.ready(Http.server.serve(":8080", endpoints))
 
   }

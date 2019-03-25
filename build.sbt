@@ -1,6 +1,6 @@
 name := "chatServerParent"
 organization in ThisBuild := "com.chat.server"
-scalaVersion in ThisBuild := "2.12.7"
+scalaVersion in ThisBuild := "2.12.8"
 
 version in ThisBuild := "1.0-SNAPSHOT"
 

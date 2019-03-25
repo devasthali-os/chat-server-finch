@@ -4,8 +4,6 @@ import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.util.{Base64StringEncoder, Future}
 
-import scala.util.control.NoStackTrace
-
 object ServerOps {
 
   final class AuthOps extends SimpleFilter[Request, Response] {
